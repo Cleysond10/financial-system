@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts"
+    "start": "ts-node src/server.ts",
+    "start:dev": "nodemon --exec ts-node src/server.ts",
+    "local": "ts-node src/index.ts"
   },
-  "author": "",
+  "author": "Cleyson Duarte",
   "license": "ISC",
   "description": "",
   "dependencies": {
