@@ -1,15 +1,15 @@
-import { Service } from "./Service";
+import { TransactionFacade } from "../facade/TransactionFacade";
 
-export class CircuitBreakerProxy implements Service {
+export class TransactionServiceProxy {
   private failureCount = 0;
   private readonly threshold = 3;
   private readonly timeout = 5000;
   private state: "CLOSED" | "OPEN" | "HALF_OPEN" = "CLOSED";
   private lastFailureTime = 0;
 
-  constructor(private readonly realService: Service) {}
+  constructor(private readonly facade: TransactionFacade) {}
 
-  execute(): void {
+  execute(accountId: string, amount: number, type: "credit" | "debit") {
     const now = Date.now();
 
     if (this.state === "OPEN" && now - this.lastFailureTime < this.timeout) {
@@ -22,7 +22,7 @@ export class CircuitBreakerProxy implements Service {
     }
 
     try {
-      this.realService.execute();
+      this.facade.createTransaction(accountId, amount, type);
       this.failureCount = 0;
       this.state = "CLOSED";
     } catch (error) {

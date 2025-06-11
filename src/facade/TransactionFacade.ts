@@ -25,7 +25,6 @@ export class TransactionFacade {
     this.transactionRepo.save(transaction);
     this.accountRepo.save(account);
 
-    // Salva snapshot após a transação
     this.snapshotManager.saveSnapshot(account.createSnapshot());
   }
 }

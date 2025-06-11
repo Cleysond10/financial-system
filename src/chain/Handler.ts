@@ -1,15 +1,4 @@
-import { AccountRepository } from "../domain/account/AccountRepository";
-import { TransactionRepository } from "../domain/transaction/TransactionRepository";
-import { SnapshotManager } from "../memento/SnapshotManager";
-
-export type TransactionContext = {
-  accountId: string;
-  amount: number;
-  type: "credit" | "debit";
-  accountRepo: AccountRepository;
-  transactionRepo: TransactionRepository;
-  snapshotManager?: SnapshotManager;
-};
+import { Command } from "../commands/ICommand";
 
 export abstract class Handler {
   protected nextHandler?: Handler;
@@ -19,12 +8,16 @@ export abstract class Handler {
     return handler;
   }
 
-  handle(context: TransactionContext): void {
-    this.process(context);
-    if (this.nextHandler) {
-      this.nextHandler.handle(context);
+  handle(command: Command): void {
+    if (this.canHandle(command)) {
+      this.process(command);
+    } else if (this.nextHandler) {
+      this.nextHandler.handle(command);
+    } else {
+      console.error("Command not handled");
     }
   }
 
-  protected abstract process(context: TransactionContext): void;
+  protected abstract canHandle(command: Command): boolean;
+  protected abstract process(command: Command): void;
 }
