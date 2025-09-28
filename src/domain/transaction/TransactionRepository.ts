@@ -1,6 +1,7 @@
+import { ITransactionRepository } from "./ITransactionRepository";
 import { Transaction } from "./Transaction";
 
-export class TransactionRepository {
+export class TransactionRepository implements ITransactionRepository {
   private transactions: Transaction[] = [];
 
   save(transaction: Transaction): void {
