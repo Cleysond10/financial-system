@@ -1,4 +1,4 @@
-# 💸 Financial Transactions Monolithic App (Design Patterns Showcase)
+# 💸 Financial Transactions Back-end App (Design Patterns Showcase)
 
 This is a **simple monolithic application** simulating a financial transaction system, built for **academic research** on software architecture evolution. It serves as a foundation for comparing **traditional design patterns (GoF)** with **modern microservice architectural patterns**.
 
@@ -14,7 +14,7 @@ The project applies **classic OOP design patterns** to a monolith architecture i
 
 | Pattern (GoF)                | Module                             | Description                                                                 | Corresponding Microservice Pattern   |
 |-----------------------------|------------------------------------|-----------------------------------------------------------------------------|-------------------------------------|
-| **Composition**             | Modular folder structure           | Logical separation of domain/infra/use-cases for future splitting           | Modular services                    |
+| **Composition**             | Modular folder structure           | Logical separation of domains for future splitting           | Modular services                    |
 | **Facade**                  | `TransactionFacade`                | Simplifies interaction with transaction logic                               | API Gateway                         |
 | **Proxy**                   | `TransactionServiceProxy`          | Adds Circuit Breaker behavior by tracking failures                          | Circuit Breaker                     |
 | **Memento**                 | `SnapshotManager`                  | Stores snapshots of account state after each transaction                    | Event Sourcing                      |
@@ -63,12 +63,29 @@ src/
 
 ## ▶️ Example Execution (via `index.ts`)
 
+### 1. Install dependencies
+
 ```bash
 npm install
-ts-node src/index.ts
 ```
 
-Output:
+### 2. Run the application
+
+* **Start the server** (useful for API testing with Postman):
+
+```bash
+npm run start:dev
+```
+
+* **Run a standalone example flow**:
+
+```bash
+npm run start
+```
+
+### 3. Expected output
+
+When running the standalone example, you should see something like:
 
 ```ts
 Final balance (query): 70
@@ -92,7 +109,7 @@ After 5 seconds, the circuit closes and normal operation resumes.
 
 ## 🔮 Next Step
 
-This monolithic architecture will be **refactored into a microservices version**, reusing domain logic and evolving each pattern into its modern counterpart (e.g., replace `Proxy` with a real circuit breaker in a service mesh).
+In future iterations, the current monolithic architecture will be **refactored into a microservices-based design**, preserving the existing domain logic while adapting each applied pattern to its modern equivalent (for example, replacing the `Proxy` with a real circuit breaker implemented within a service mesh).
 
 ---
 
