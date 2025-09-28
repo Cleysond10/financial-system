@@ -9,25 +9,25 @@ import { GetAccountTransactionsQuery } from "./queries/GetAccountTransactionsQue
 import { CreateTransactionCommand } from "./commands/CreateTransactionCommand";
 import { CreateTransactionHandler } from "./chain/CreateTransactionHandler";
 
+// Configuração dos repositórios e serviços
 const accountRepo = new AccountRepository();
 const transactionRepo = new TransactionRepository();
 const snapshotManager = new SnapshotManager();
 
+// Facade e Proxy para simplificar a interface de transações e adicionar controle de acesso (Proxy Pattern)
 const facade = new TransactionFacade(accountRepo, transactionRepo, snapshotManager);
 const proxy = new TransactionServiceProxy(facade);
-
-// Handler da cadeia de comandos
 const handler = new CreateTransactionHandler();
 
-// Criando conta de teste
+// Criando conta de teste e salvando no repositório (injeção manual)
 const account = new Account("acc-1", "Cleyson", 100);
 accountRepo.save(account);
 
-// Comando de transação
+// Executando comando de transação através do proxy e handler da cadeia de comandos (Chain of Responsibility)
 const command = new CreateTransactionCommand(proxy, "acc-1", 50, "credit");
 handler.handle(command);
 
-// Executando queries (CQRS)
+// Executando queries de leitura (CQRS)
 const balanceQuery = new GetAccountBalanceQuery(accountRepo);
 const transactionsQuery = new GetAccountTransactionsQuery(transactionRepo);
 
